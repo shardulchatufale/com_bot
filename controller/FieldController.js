@@ -99,6 +99,77 @@ const GetSingelField = async function (req, res) {
 const UpdateField = async function (req, res) {
   try {
 
+    let FieldId = req.params.Id
+
+    let data = req.body
+
+    //---------[Validations]
+
+    console.log(FieldId,"..........110");
+    if (!mongoose.Types.ObjectId.isValid(FieldId)) return res.status(400).send({ status: false, message: 'Invalid FieldId Format' })
+
+    if (Object.keys(data).length === 0) return res.status(400).send({ status: false, message: "Please Provide data to Update a Field." })
+
+    //---------[Check field is Present in Db or not]
+
+    let CheckField = await fieldModule.findOne({ _id: FieldId })
+    if (!CheckField) return res.status(404).send({ status: false, message: "Field Not Found" });
+
+    //---------[Authorisation]
+
+    const token = req.UserId
+    if (token !== CheckField.user.toString()) return res.status(403).send({ status: false, message: "you cannot update other users Field" });
+
+    
+
+    if (data.name) {
+      if (!validator.isValid(data.name)) return res.status(400).send({ status: false, message: 'Please enter  name in right formate' })
+        CheckField.name = data.name
+    }
+
+    //.....(Change caption)
+
+    if (data.caption) {
+      if (!validator.isValid(data.caption)) return res.status(400).send({ status: false, message: 'Please enter  caption in right formate' })
+        CheckField.caption = data.caption
+    }
+
+    //.....(Change display_location)
+
+    if (data.display_location) {
+      const isvaliddisplay_location = function (display_location) {return ['list', 'single'].indexOf(display_location) === -1
+    }
+    if(isvaliddisplay_location(data.display_location)) return res.status(400).send({ status: false, message: "display_location must be list or single " })
+
+        CheckField.display_location = data.display_location
+    }
+
+
+    if (data.slug) {
+      if (!validator.isValid(data.slug)) return res.status(400).send({ status: false, message: 'Please enter  slug in right formate' })
+      let DupSlug = await fieldModule.findOne({$and:[{ slug:data.slug}, {user:req.UserId }]})
+      if (DupSlug) return res.status(400).send({ status: false, message: 'slug is already used before' })
+  
+        CheckField.slug = data.slug
+    }
+
+    if(data.type){
+      const isvalidtype = function (type) {
+        return ["string", "number", "date", "date-time"].indexOf(type) === -1
+      }
+      if (isvalidtype(data.type)) return res.status(400).send({ status: false, message: "type must be string or number or date,date-time" })
+  CheckField.type=data.type
+    }
+   
+
+    if(data.default_){
+       CheckField.default_=data.default_
+    }
+    CheckField.save()
+
+    //---------[Send response]
+
+    return res.status(200).send({ status: true, message: 'Updated field', data: CheckField })
 
 
   } catch {

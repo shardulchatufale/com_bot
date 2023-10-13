@@ -8,6 +8,7 @@ const fieldTemplateSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    //name is unique for this caption only
   },
   caption: {
     type: String,
@@ -23,7 +24,7 @@ const fieldTemplateSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    //slug is unique for a user
+    //slug is unique for a user only
   },
   type: {
     type: String,
