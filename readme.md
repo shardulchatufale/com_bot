@@ -1,5 +1,5 @@
 # COM BOT - Backend API Assignment 
-Backend API project based on Node.js Express server and MongoDB as database.
+Backend API project based on Node.js ,Express server and MongoDB as database.
 
 
 ## API List

@@ -103,24 +103,26 @@ const UpdateField = async function (req, res) {
 
     let data = req.body
 
+    let {name,caption,display_location,slug,type,default_,...rest }=data
+    if (Object.keys(rest).length > 0) return res.status(400).send({ status: false, message: `you can't update ${Object.keys(rest)} key,other than user,name,caption,display_location,slug,type,default_.` })
+
     //---------[Validations]
 
-    console.log(FieldId,"..........110");
+
     if (!mongoose.Types.ObjectId.isValid(FieldId)) return res.status(400).send({ status: false, message: 'Invalid FieldId Format' })
 
     if (Object.keys(data).length === 0) return res.status(400).send({ status: false, message: "Please Provide data to Update a Field." })
 
+      //---------[Authorisation]
+
+      const token = req.UserId
+      if (token !== CheckField.user.toString()) return res.status(403).send({ status: false, message: "you cannot update other users Field" });
+  
+      
     //---------[Check field is Present in Db or not]
 
     let CheckField = await fieldModule.findOne({ _id: FieldId })
     if (!CheckField) return res.status(404).send({ status: false, message: "Field Not Found" });
-
-    //---------[Authorisation]
-
-    const token = req.UserId
-    if (token !== CheckField.user.toString()) return res.status(403).send({ status: false, message: "you cannot update other users Field" });
-
-    
 
     if (data.name) {
       if (!validator.isValid(data.name)) return res.status(400).send({ status: false, message: 'Please enter  name in right formate' })
@@ -158,7 +160,7 @@ const UpdateField = async function (req, res) {
         return ["string", "number", "date", "date-time"].indexOf(type) === -1
       }
       if (isvalidtype(data.type)) return res.status(400).send({ status: false, message: "type must be string or number or date,date-time" })
-  CheckField.type=data.type
+      CheckField.type=data.type
     }
    
 
