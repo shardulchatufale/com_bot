@@ -18,7 +18,7 @@ mongoose.connect('mongodb+srv://shardulschatufale:shardul1234@cluster0.w686kdy.m
 app.use('/', route);
 
 app.all('/**', (req, res) => {
-  res.status(404).send({ status: false, message: 'Page Not Found!' });
+  res.status(404).send({ status: false, message: 'Page Not Found! MISTAKE IN ROUTE' });
 });
 
 app.listen(process.env.PORT || 3000, function () {

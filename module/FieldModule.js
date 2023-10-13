@@ -30,7 +30,7 @@ const fieldTemplateSchema = new mongoose.Schema({
     enum: ['string', 'number', 'date', 'date-time'],//*********************************************************** */
     required: true,
   },
-  dfault: {//************************************************** */
+  default_: {//************************************************** */
     type:mongoose.Schema.Types.Mixed,
     required: true,
   },

@@ -10,7 +10,7 @@ const { title } = require("process");
 const CreatteField = async (req, res) => {
   try {
     let data = req.body
-    let { name, caption, display_location, slug, type, dfault, ...rest } = data
+    let { name, caption, display_location, slug, type, default_, ...rest } = data
     data.user = req.UserId;
 
     if (Object.keys(rest).length > 0) return res.status(400).send({ status: false, message: `you can't provide ${Object.keys(rest)} key` })
@@ -38,7 +38,7 @@ const CreatteField = async (req, res) => {
     if (isvalidtype(type)) return res.status(400).send({ status: false, message: "type must be string or number or date,date-time" })
 
 
-    if (!dfault) return res.status(400).send({ status: false, msg: ' dfault in dfault field is required' });
+    if (!default_) return res.status(400).send({ status: false, msg: ' dfault in dfault field is required' });
 
 
     if (req.UserId !== data.user.toString()) return res.status(403).send({ status: false, message: "you cannot create other users books please provide your user ID" });
@@ -75,12 +75,10 @@ const AllField = async function (req, res) {
 
 const GetSingelField = async function (req, res) {
   try {
-    let FieldId = req.params//*********************************************************************** */
-    if (Object.keys(req.params).length > 1) return res.status(400).send({ status: false, message: `Can not pass more than 1(id) param.` })
+    let FieldId = req.params
 
-    let { Id, ...rest } = FieldId
-    //************************************************************ */
-  
+    let { Id } = FieldId
+ 
     if (!mongoose.Types.ObjectId.isValid(Id)) return res.status(400).send({ status: false, message: 'Invalid UserId Format' })
 
     let CheckField = await fieldModule.findOne({ _id: Id })
@@ -121,7 +119,7 @@ const deleteField = async function (req, res) {
     if (token !== CheckField.user.toString()) res.status(403).send({ status: false, message: "you cannot delete other users book" });
 
 
-    await fieldModule.findOneAndDelete({ _id: CheckField });
+    await fieldModule.findOneAndDelete({ _id: CheckField._id });
 
     res.status(200).send({ status: true, message: 'This field is deleted successfully' })
 
