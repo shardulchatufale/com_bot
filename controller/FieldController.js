@@ -26,7 +26,7 @@ const CreatteField = async (req, res) => {
     if (DupNameCaption) return res.status(400).send({ status: false, message: 'this caption has already this name.use different name for this caption' })
 
     if (!display_location) return res.status(400).send({ status: false, message: 'display_location in display_location field is required' })
-    const isvaliddisplay_location = function (display_location) {return ['list', 'single'].indexOf(title) === -1
+    const isvaliddisplay_location = function (display_location) {return ['list', 'single'].indexOf(display_location) === -1
     }
     if(isvaliddisplay_location(display_location)) return res.status(400).send({ status: false, message: "display_location must be list or single " })
 
@@ -51,7 +51,6 @@ const CreatteField = async (req, res) => {
 
     let response = await fieldModule.findById({ _id: CreaatedField._id }).select({ _id: 0, user: 0 })
 
-    console.log("response", response);
     res.status(201).send({ status: true, message: "Success", data: response })
 
 
