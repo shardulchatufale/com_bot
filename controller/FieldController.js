@@ -104,7 +104,7 @@ const UpdateField = async function (req, res) {
     let data = req.body
 
     let {name,caption,display_location,slug,type,default_,...rest }=data
-    if (Object.keys(rest).length > 0) return res.status(400).send({ status: false, message: `you can't update ${Object.keys(rest)} key,other than user,name,caption,display_location,slug,type,default_.` })
+    if (Object.keys(rest).length > 0) return res.status(400).send({ status: false, message: `you can't update ${Object.keys(rest)} key,other than name,caption,display_location,slug,type,default_.` })
 
     //---------[Validations]
 
