@@ -23,7 +23,7 @@ const fieldTemplateSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique:true
+    //slug is unique for a user
   },
   type: {
     type: String,

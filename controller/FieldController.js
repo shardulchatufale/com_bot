@@ -22,8 +22,8 @@ const CreatteField = async (req, res) => {
     if (!caption) return res.status(400).send({ status: false, msg: ' caption in caption field is required' });
     if (!validator.isValid(caption)) return res.status(400).send({ status: false, message: 'Please enter  caption in right formate' })
 
-    let DupNameCaption = await fieldModule.findOne({ name: name, caption: caption })
-    if (DupNameCaption) return res.status(400).send({ status: false, message: 'this caption has already this name.use different name for this caption' })
+    let DupNameCaption = await fieldModule.findOne({$and:[{ name: name}, {caption: caption },{user:req.UserId}]})
+    if (DupNameCaption) return res.status(400).send({ status: false, message: 'this caption has already this same name.use different name for this caption' })
 
     if (!display_location) return res.status(400).send({ status: false, message: 'display_location in display_location field is required' })
     const isvaliddisplay_location = function (display_location) {return ['list', 'single'].indexOf(display_location) === -1
@@ -32,7 +32,7 @@ const CreatteField = async (req, res) => {
 
     if (!slug) return res.status(400).send({ status: false, msg: ' slug in slug field is required' });
     if (!validator.isValid(slug)) return res.status(400).send({ status: false, message: 'Please enter  slug in right formate' })
-    let DupSlug = await fieldModule.findOne({ slug: slug })
+    let DupSlug = await fieldModule.findOne({$and:[{ slug:slug}, {user:req.UserId }]})
     if (DupSlug) return res.status(400).send({ status: false, message: 'slug is already used before' })
 
     const isvalidtype = function (type) {
