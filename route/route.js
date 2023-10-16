@@ -18,7 +18,6 @@ router.get('/fields',MiddleWare.authenticate,FieldController.AllField)
 router.get('/fields/:Id',MiddleWare.authenticate,FieldController.GetSingelField)
 router.put('/fields/:Id',MiddleWare.authenticate,FieldController.UpdateField)
 router.delete('/fields/:Id',MiddleWare.authenticate,FieldController.deleteField)
-//res 
-router.delete('*',MiddleWare.authenticate, )
+
 
 module.exports = router;

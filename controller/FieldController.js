@@ -46,7 +46,7 @@ const CreatteField = async (req, res) => {
     if (!default_) return res.status(400).send({ status: false, msg: ' dfault in dfault field is required' });
 
 
-    if (req.UserId !== data.user.toString()) return res.status(403).send({ status: false, message: "you cannot create other users books please provide your user ID" });
+    if (req.UserId !== data.user.toString()) return res.status(403).send({ status: false, message: "you cannot create other users field please provide your user ID" });
     let CreaatedField = await fieldModule.create(data)
 
     let response = await fieldModule.findById({ _id: CreaatedField._id }).select({ _id: 0, user: 0 })
@@ -88,7 +88,7 @@ const GetSingelField = async function (req, res) {
     let CheckField = await fieldModule.findOne({ _id: Id })
     if (!CheckField) return res.status(404).send({ status: false, message: "Field Not Found" });
 
-    res.status(200).send({ status: true, message: 'Book list', data: CheckField })
+    res.status(200).send({ status: true, message: 'field list', data: CheckField })
 
   } catch {
     res.status(500).json({ message: 'Server error' });
@@ -98,7 +98,7 @@ const GetSingelField = async function (req, res) {
 
 const UpdateField = async function (req, res) {
   try {
-console.log("........101");
+
     let FieldId = req.params.Id
 
     let data = req.body
@@ -184,7 +184,7 @@ const deleteField = async function (req, res) {
   try {
 
     let FieldId = req.params.Id
-console.log(".........186");
+
 
     if (!mongoose.Types.ObjectId.isValid(FieldId)) return res.status(400).send({ status: false, message: 'Invalid FieldId Format' })
 
@@ -194,7 +194,7 @@ console.log(".........186");
 
 
     const token = req.UserId
-    if (token !== CheckField.user.toString()) res.status(403).send({ status: false, message: "you cannot delete other users book" });
+    if (token !== CheckField.user.toString()) res.status(403).send({ status: false, message: "you cannot delete other users field" });
 
 
     await fieldModule.findOneAndDelete({ _id: CheckField._id });
