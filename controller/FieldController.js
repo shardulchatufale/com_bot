@@ -64,7 +64,7 @@ const CreatteField = async (req, res) => {
 
 const AllField = async function (req, res) {
   try {
-  
+    // In this API you will get only your's 20 field
     let data = await fieldModule.find({ user: req.UserId }).limit(20)///***************************************8 */
 
     if (Object.keys(data).length == 0) return res.status(404).send({ status: false, message: 'field not found' })
@@ -98,7 +98,7 @@ const GetSingelField = async function (req, res) {
 
 const UpdateField = async function (req, res) {
   try {
-
+console.log("........101");
     let FieldId = req.params.Id
 
     let data = req.body
@@ -115,15 +115,16 @@ const UpdateField = async function (req, res) {
 
       //---------[Authorisation]
 
-      const token = req.UserId
-      if (token !== CheckField.user.toString()) return res.status(403).send({ status: false, message: "you cannot update other users Field" });
-  
-      
+   
     //---------[Check field is Present in Db or not]
 
     let CheckField = await fieldModule.findOne({ _id: FieldId })
     if (!CheckField) return res.status(404).send({ status: false, message: "Field Not Found" });
+    
+    const token = req.UserId
+    if (token !== CheckField.user.toString()) return res.status(403).send({ status: false, message: "you cannot update other users Field" });
 
+    
     if (data.name) {
       if (!validator.isValid(data.name)) return res.status(400).send({ status: false, message: 'Please enter  name in right formate' })
         CheckField.name = data.name
@@ -183,7 +184,7 @@ const deleteField = async function (req, res) {
   try {
 
     let FieldId = req.params.Id
-
+console.log(".........186");
 
     if (!mongoose.Types.ObjectId.isValid(FieldId)) return res.status(400).send({ status: false, message: 'Invalid FieldId Format' })
 
